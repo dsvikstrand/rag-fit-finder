@@ -1,12 +1,112 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useState, useRef } from "react";
+import { HeroSection } from "@/components/HeroSection";
+import { FitCheckForm } from "@/components/FitCheckForm";
+import { ResultsSection } from "@/components/ResultsSection";
+import { NewsletterSection } from "@/components/NewsletterSection";
+import { Footer } from "@/components/Footer";
+import { 
+  determineBucket, 
+  generateExplanations, 
+  generateBullets, 
+  generateSummary,
+  type FormData,
+  type Bucket 
+} from "@/lib/bucketLogic";
 
 const Index = () => {
+  const [results, setResults] = useState<{
+    bucket: Bucket;
+    summary: string;
+    explanations: { answer: string; implication: string }[];
+    bullets: string[];
+    formData: FormData;
+  } | null>(null);
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const formRef = useRef<HTMLDivElement>(null);
+  const resultsRef = useRef<HTMLDivElement>(null);
+
+  const scrollToForm = () => {
+    formRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const handleFormSubmit = async (formData: FormData) => {
+    setIsAnalyzing(true);
+    
+    // Small delay for UX
+    await new Promise(resolve => setTimeout(resolve, 800));
+
+    const bucket = determineBucket(formData);
+    const explanations = generateExplanations(formData);
+    const bullets = generateBullets(bucket, formData);
+    const summary = generateSummary(bucket);
+
+    setResults({
+      bucket,
+      summary,
+      explanations,
+      bullets,
+      formData,
+    });
+
+    setIsAnalyzing(false);
+
+    // Scroll to results after state update
+    setTimeout(() => {
+      resultsRef.current?.scrollIntoView({ behavior: "smooth" });
+    }, 100);
+  };
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="mb-4 text-4xl font-bold">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
-      </div>
+    <div className="min-h-screen bg-background">
+      {/* Header */}
+      <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border/50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+          <a href="/" className="font-display text-xl font-semibold gradient-text">
+            RAG Fit Check
+          </a>
+          <nav className="hidden sm:flex items-center gap-6 text-sm">
+            <button 
+              onClick={scrollToForm}
+              className="text-muted-foreground hover:text-foreground transition-colors"
+            >
+              Start assessment
+            </button>
+            <a 
+              href="#contact" 
+              className="text-muted-foreground hover:text-foreground transition-colors"
+            >
+              Contact
+            </a>
+          </nav>
+        </div>
+      </header>
+
+      {/* Main content */}
+      <main className="pt-16">
+        <HeroSection onStartClick={scrollToForm} />
+        
+        <div ref={formRef}>
+          <FitCheckForm onSubmit={handleFormSubmit} isLoading={isAnalyzing} />
+        </div>
+
+        {results && (
+          <div ref={resultsRef}>
+            <ResultsSection 
+              bucket={results.bucket}
+              summary={results.summary}
+              explanations={results.explanations}
+              bullets={results.bullets}
+              formData={results.formData}
+            />
+            <NewsletterSection 
+              bucket={results.bucket} 
+              initialEmail={results.formData.email} 
+            />
+          </div>
+        )}
+      </main>
+
+      <Footer />
     </div>
   );
 };
