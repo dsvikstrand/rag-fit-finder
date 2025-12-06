@@ -4,6 +4,8 @@ import { FitCheckForm } from "@/components/FitCheckForm";
 import { ResultsSection } from "@/components/ResultsSection";
 import { NewsletterSection } from "@/components/NewsletterSection";
 import { Footer } from "@/components/Footer";
+import { LanguageToggle } from "@/components/LanguageToggle";
+import { useTranslation } from "@/lib/i18n";
 import { 
   determineBucket, 
   generateExplanations, 
@@ -14,6 +16,7 @@ import {
 } from "@/lib/bucketLogic";
 
 const Index = () => {
+  const { t } = useTranslation();
   const [results, setResults] = useState<{
     bucket: Bucket;
     summary: string;
@@ -64,20 +67,23 @@ const Index = () => {
           <a href="/" className="font-display text-xl font-semibold gradient-text">
             RAG Fit Check
           </a>
-          <nav className="hidden sm:flex items-center gap-6 text-sm">
-            <button 
-              onClick={scrollToForm}
-              className="text-muted-foreground hover:text-foreground transition-colors"
-            >
-              Start assessment
-            </button>
-            <a 
-              href="#contact" 
-              className="text-muted-foreground hover:text-foreground transition-colors"
-            >
-              Contact
-            </a>
-          </nav>
+          <div className="flex items-center gap-4">
+            <nav className="hidden sm:flex items-center gap-6 text-sm">
+              <button 
+                onClick={scrollToForm}
+                className="text-muted-foreground hover:text-foreground transition-colors"
+              >
+                {t.header.startAssessment}
+              </button>
+              <a 
+                href="#contact" 
+                className="text-muted-foreground hover:text-foreground transition-colors"
+              >
+                {t.header.contact}
+              </a>
+            </nav>
+            <LanguageToggle />
+          </div>
         </div>
       </header>
 

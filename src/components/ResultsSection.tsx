@@ -9,8 +9,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { CheckCircle2, Star, ArrowRight, Zap, Server, Lock, ExternalLink } from "lucide-react";
+import { useTranslation } from "@/lib/i18n";
 import type { Bucket, FormData } from "@/lib/bucketLogic";
-import { getBucketLabel } from "@/lib/bucketLogic";
 
 interface ResultsSectionProps {
   bucket: Bucket;
@@ -19,36 +19,6 @@ interface ResultsSectionProps {
   bullets: string[];
   formData: FormData;
 }
-
-const KPI_DATA = {
-  simple: {
-    bestFor: "Quick setup, small data, limited budget",
-    quality: 2,
-    qualityLabel: "Basic",
-    speed: "2–5 sec",
-    cost: "€10–100/mo",
-    control: "Hosted SaaS",
-    complexity: "Very low",
-  },
-  mid: {
-    bestFor: "Better answers, custom retrieval, API flexibility",
-    quality: 4,
-    qualityLabel: "Strong",
-    speed: "1–3 sec",
-    cost: "€100–1000/mo",
-    control: "Your stack on cloud APIs",
-    complexity: "Medium (needs engineer)",
-  },
-  indepth: {
-    bestFor: "Full control, sensitive data, max quality",
-    quality: 5,
-    qualityLabel: "Advanced reasoning",
-    speed: "Configurable",
-    cost: "€500–5000+/mo",
-    control: "Private or on-prem",
-    complexity: "High (needs specialist)",
-  },
-};
 
 function StarRating({ count }: { count: number }) {
   return (
@@ -64,7 +34,51 @@ function StarRating({ count }: { count: number }) {
 }
 
 export function ResultsSection({ bucket, summary, explanations, bullets, formData }: ResultsSectionProps) {
+  const { t } = useTranslation();
   const buckets: Bucket[] = ["simple", "mid", "indepth"];
+
+  const getBucketLabel = (b: Bucket) => {
+    switch (b) {
+      case "simple": return t.results.simpleLabel;
+      case "mid": return t.results.midLabel;
+      case "indepth": return t.results.indepthLabel;
+    }
+  };
+
+  const getKpiData = (b: Bucket) => {
+    switch (b) {
+      case "simple":
+        return {
+          bestFor: t.results.simpleBestFor,
+          quality: 2,
+          qualityLabel: t.results.simpleQualityLabel,
+          speed: "2–5 sec",
+          cost: "€10–100/mo",
+          control: t.results.simpleControl,
+          complexity: t.results.simpleComplexity,
+        };
+      case "mid":
+        return {
+          bestFor: t.results.midBestFor,
+          quality: 4,
+          qualityLabel: t.results.midQualityLabel,
+          speed: "1–3 sec",
+          cost: "€100–1000/mo",
+          control: t.results.midControl,
+          complexity: t.results.midComplexity,
+        };
+      case "indepth":
+        return {
+          bestFor: t.results.indepthBestFor,
+          quality: 5,
+          qualityLabel: t.results.indepthQualityLabel,
+          speed: "Configurable",
+          cost: "€500–5000+/mo",
+          control: t.results.indepthControl,
+          complexity: t.results.indepthComplexity,
+        };
+    }
+  };
 
   return (
     <section id="results-section" className="section-padding animate-fade-in">
@@ -76,7 +90,7 @@ export function ResultsSection({ bucket, summary, explanations, bullets, formDat
             className="text-lg px-6 py-2 border-2 border-primary bg-primary/5 text-primary"
           >
             <CheckCircle2 className="h-5 w-5 mr-2" />
-            Recommended: {getBucketLabel(bucket)}
+            {t.results.recommended}: {getBucketLabel(bucket)}
           </Badge>
           
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
@@ -87,26 +101,26 @@ export function ResultsSection({ bucket, summary, explanations, bullets, formDat
         {/* KPI Comparison Table */}
         <div className="card-elevated overflow-hidden animate-slide-up" style={{ animationDelay: "0.1s" }}>
           <div className="p-6 border-b border-border">
-            <h3 className="text-xl font-display font-semibold">Compare your options</h3>
-            <p className="text-sm text-muted-foreground mt-1">Non-technical overview of each approach</p>
+            <h3 className="text-xl font-display font-semibold">{t.results.compareTitle}</h3>
+            <p className="text-sm text-muted-foreground mt-1">{t.results.compareSubtitle}</p>
           </div>
           
           <div className="overflow-x-auto">
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead className="w-[160px]">Option</TableHead>
-                  <TableHead>Best for</TableHead>
-                  <TableHead>Answer quality</TableHead>
-                  <TableHead>Speed</TableHead>
-                  <TableHead>Cost at your scale</TableHead>
-                  <TableHead>Data & control</TableHead>
-                  <TableHead>Complexity</TableHead>
+                  <TableHead className="w-[160px]">{t.results.option}</TableHead>
+                  <TableHead>{t.results.bestFor}</TableHead>
+                  <TableHead>{t.results.answerQuality}</TableHead>
+                  <TableHead>{t.results.speed}</TableHead>
+                  <TableHead>{t.results.costAtScale}</TableHead>
+                  <TableHead>{t.results.dataControl}</TableHead>
+                  <TableHead>{t.results.complexity}</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {buckets.map((b) => {
-                  const data = KPI_DATA[b];
+                  const data = getKpiData(b);
                   const isRecommended = b === bucket;
                   return (
                     <TableRow 
@@ -118,7 +132,7 @@ export function ResultsSection({ bucket, summary, explanations, bullets, formDat
                           <span>{getBucketLabel(b).split("(")[0].trim()}</span>
                           {isRecommended && (
                             <Badge variant="secondary" className="w-fit text-xs bg-primary/10 text-primary">
-                              Recommended
+                              {t.results.recommended}
                             </Badge>
                           )}
                         </div>
@@ -145,15 +159,15 @@ export function ResultsSection({ bucket, summary, explanations, bullets, formDat
         {/* Explanation Table */}
         <div className="card-elevated overflow-hidden animate-slide-up" style={{ animationDelay: "0.2s" }}>
           <div className="p-6 border-b border-border">
-            <h3 className="text-xl font-display font-semibold">Why this recommendation?</h3>
-            <p className="text-sm text-muted-foreground mt-1">How your answers shaped the result</p>
+            <h3 className="text-xl font-display font-semibold">{t.results.whyTitle}</h3>
+            <p className="text-sm text-muted-foreground mt-1">{t.results.whySubtitle}</p>
           </div>
           
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead className="w-1/3">Your answers</TableHead>
-                <TableHead>What this implies</TableHead>
+                <TableHead className="w-1/3">{t.results.yourAnswers}</TableHead>
+                <TableHead>{t.results.whatThisImplies}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -178,6 +192,29 @@ export function ResultsSection({ bucket, summary, explanations, bullets, formDat
           </div>
         </div>
 
+        {/* What's the difference section */}
+        <div className="card-elevated overflow-hidden animate-slide-up" style={{ animationDelay: "0.25s" }}>
+          <div className="p-6 border-b border-border">
+            <h3 className="text-xl font-display font-semibold">{t.results.differenceTitle}</h3>
+            <p className="text-sm text-muted-foreground mt-1">{t.results.differenceSubtitle}</p>
+          </div>
+          
+          <div className="divide-y divide-border">
+            <div className="p-6">
+              <h4 className="font-display font-semibold text-foreground mb-2">{t.results.simpleApproachTitle}</h4>
+              <p className="text-sm text-muted-foreground leading-relaxed">{t.results.simpleApproachDesc}</p>
+            </div>
+            <div className="p-6">
+              <h4 className="font-display font-semibold text-foreground mb-2">{t.results.midApproachTitle}</h4>
+              <p className="text-sm text-muted-foreground leading-relaxed">{t.results.midApproachDesc}</p>
+            </div>
+            <div className="p-6">
+              <h4 className="font-display font-semibold text-foreground mb-2">{t.results.indepthApproachTitle}</h4>
+              <p className="text-sm text-muted-foreground leading-relaxed">{t.results.indepthApproachDesc}</p>
+            </div>
+          </div>
+        </div>
+
         {/* Next Steps CTA */}
         <div className="card-elevated p-6 sm:p-8 animate-slide-up" style={{ animationDelay: "0.3s" }}>
           <NextStepsCTA bucket={bucket} />
@@ -188,6 +225,8 @@ export function ResultsSection({ bucket, summary, explanations, bullets, formDat
 }
 
 function NextStepsCTA({ bucket }: { bucket: Bucket }) {
+  const { t } = useTranslation();
+
   if (bucket === "simple") {
     return (
       <div className="space-y-4">
@@ -195,16 +234,14 @@ function NextStepsCTA({ bucket }: { bucket: Bucket }) {
           <div className="p-2 rounded-lg bg-accent/10">
             <Zap className="h-6 w-6 text-accent" />
           </div>
-          <h3 className="text-xl font-display font-semibold">You're a great fit for SaaS</h3>
+          <h3 className="text-xl font-display font-semibold">{t.results.simpleCTATitle}</h3>
         </div>
         <p className="text-muted-foreground leading-relaxed">
-          A no-code or low-code SaaS chatbot connected to your docs is your best starting point. 
-          I recommend picking 1–2 well-supported tools and configuring them properly before 
-          thinking about custom models.
+          {t.results.simpleCTADesc}
         </p>
         <Button asChild className="mt-4">
           <a href="#contact">
-            Get help picking a SaaS tool
+            {t.results.simpleCTAButton}
             <ExternalLink className="ml-2 h-4 w-4" />
           </a>
         </Button>
@@ -219,23 +256,20 @@ function NextStepsCTA({ bucket }: { bucket: Bucket }) {
           <div className="p-2 rounded-lg bg-primary/10">
             <Server className="h-6 w-6 text-primary" />
           </div>
-          <h3 className="text-xl font-display font-semibold">Ready for a custom RAG backend</h3>
+          <h3 className="text-xl font-display font-semibold">{t.results.midCTATitle}</h3>
         </div>
         <p className="text-muted-foreground leading-relaxed">
-          You're a strong candidate for a custom RAG backend using pre-trained models. 
-          This usually means: a high-quality embedding model, a vector database, and an 
-          LLM API wired together for your use case.
+          {t.results.midCTADesc}
         </p>
         <p className="text-foreground font-medium mt-4">
-          This is where I typically work with clients: designing the architecture, wiring the stack together, 
-          and evaluating it on your real questions.
+          {t.results.midCTANote}
         </p>
         <p className="text-xs text-muted-foreground mt-2 italic">
-          For your devs: Technically, this often means a strong cloud model via API plus a vector database.
+          {t.results.midCTADevNote}
         </p>
         <Button asChild className="mt-4">
           <a href="#contact">
-            Turn this into a concrete architecture
+            {t.results.midCTAButton}
             <ExternalLink className="ml-2 h-4 w-4" />
           </a>
         </Button>
@@ -249,22 +283,20 @@ function NextStepsCTA({ bucket }: { bucket: Bucket }) {
         <div className="p-2 rounded-lg bg-accent/10">
           <Lock className="h-6 w-6 text-accent" />
         </div>
-        <h3 className="text-xl font-display font-semibold">Consider a private, custom-trained model</h3>
+        <h3 className="text-xl font-display font-semibold">{t.results.indepthCTATitle}</h3>
       </div>
       <p className="text-muted-foreground leading-relaxed">
-        Because of your data sensitivity, scale, or budget, a more private or custom-trained model 
-        is worth considering. This might mean hosting an open model on private GPUs and fine-tuning 
-        it on your tickets, contracts, or knowledge base.
+        {t.results.indepthCTADesc}
       </p>
       <p className="text-foreground font-medium mt-4">
-        This is my specialty: custom RAG systems and model adaptation on dedicated GPUs.
+        {t.results.indepthCTANote}
       </p>
       <p className="text-xs text-muted-foreground mt-2 italic">
-        For your devs: Technically, this often means hosting a strong open model on private GPUs with a tuned RAG stack.
+        {t.results.indepthCTADevNote}
       </p>
       <Button asChild className="mt-4">
         <a href="#contact">
-          Discuss a custom RAG build
+          {t.results.indepthCTAButton}
           <ExternalLink className="ml-2 h-4 w-4" />
         </a>
       </Button>

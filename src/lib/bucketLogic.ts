@@ -75,6 +75,7 @@ export function determineBucket(formData: FormData): Bucket {
   return "mid";
 }
 
+// These functions now return English text - translations happen in the components
 export function generateExplanations(formData: FormData): { answer: string; implication: string }[] {
   const explanations: { answer: string; implication: string }[] = [];
 
