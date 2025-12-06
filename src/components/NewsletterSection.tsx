@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Loader2, Mail, CheckCircle } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { useTranslation } from "@/lib/i18n";
 import type { Bucket } from "@/lib/bucketLogic";
 
 interface NewsletterSectionProps {
@@ -14,6 +15,7 @@ interface NewsletterSectionProps {
 }
 
 export function NewsletterSection({ bucket, initialEmail = "" }: NewsletterSectionProps) {
+  const { t } = useTranslation();
   const [email, setEmail] = useState(initialEmail);
   const [consent, setConsent] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -25,8 +27,8 @@ export function NewsletterSection({ bucket, initialEmail = "" }: NewsletterSecti
     
     if (!email || !consent) {
       toast({
-        title: "Please fill in all fields",
-        description: "Email and consent are required to subscribe.",
+        title: t.newsletter.errorTitle,
+        description: t.newsletter.errorDescription,
         variant: "destructive",
       });
       return;
@@ -44,8 +46,8 @@ export function NewsletterSection({ bucket, initialEmail = "" }: NewsletterSecti
       if (error) {
         if (error.code === "23505") {
           toast({
-            title: "Already subscribed",
-            description: "This email is already on our list!",
+            title: t.newsletter.alreadySubscribed,
+            description: t.newsletter.alreadySubscribedDesc,
           });
         } else {
           throw error;
@@ -53,15 +55,15 @@ export function NewsletterSection({ bucket, initialEmail = "" }: NewsletterSecti
       } else {
         setIsSubscribed(true);
         toast({
-          title: "Thanks for subscribing!",
-          description: "I'll send you a summary and practical RAG tips.",
+          title: t.newsletter.successTitle,
+          description: t.newsletter.successDescription,
         });
       }
     } catch (error) {
       console.error("Subscription error:", error);
       toast({
-        title: "Something went wrong",
-        description: "Please try again later.",
+        title: t.newsletter.errorTitle,
+        description: t.newsletter.errorDescription,
         variant: "destructive",
       });
     } finally {
@@ -77,10 +79,9 @@ export function NewsletterSection({ bucket, initialEmail = "" }: NewsletterSecti
             <div className="w-16 h-16 rounded-full bg-success/10 flex items-center justify-center mx-auto">
               <CheckCircle className="h-8 w-8 text-success" />
             </div>
-            <h3 className="text-xl font-display font-semibold">You're on the list!</h3>
+            <h3 className="text-xl font-display font-semibold">{t.newsletter.successTitle}</h3>
             <p className="text-muted-foreground">
-              I'll send you a summary of this recommendation and practical RAG tips 
-              (1–2 per month, no spam).
+              {t.newsletter.successDescription}
             </p>
           </div>
         </div>
@@ -96,12 +97,11 @@ export function NewsletterSection({ bucket, initialEmail = "" }: NewsletterSecti
             <div className="p-2 rounded-lg bg-primary/10">
               <Mail className="h-6 w-6 text-primary" />
             </div>
-            <h3 className="text-xl font-display font-semibold">Get a summary & RAG tips</h3>
+            <h3 className="text-xl font-display font-semibold">{t.newsletter.title}</h3>
           </div>
 
           <p className="text-muted-foreground mb-6">
-            Want a PDF summary of this recommendation and occasional practical RAG insights? 
-            Subscribe below (1–2 emails per month, no spam).
+            {t.newsletter.description}
           </p>
 
           <form onSubmit={handleSubscribe} className="space-y-4">
@@ -112,7 +112,7 @@ export function NewsletterSection({ bucket, initialEmail = "" }: NewsletterSecti
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="your@email.com"
+                placeholder={t.newsletter.emailPlaceholder}
                 className="w-full"
               />
             </div>
@@ -124,8 +124,7 @@ export function NewsletterSection({ bucket, initialEmail = "" }: NewsletterSecti
                 className="mt-0.5"
               />
               <span className="text-sm text-muted-foreground leading-relaxed">
-                Send me a short PDF summary of this recommendation and occasional RAG tips 
-                (1–2 per month, no spam).
+                {t.newsletter.consentText}
               </span>
             </label>
 
@@ -133,10 +132,10 @@ export function NewsletterSection({ bucket, initialEmail = "" }: NewsletterSecti
               {isLoading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Subscribing...
+                  {t.newsletter.subscribingButton}
                 </>
               ) : (
-                "Subscribe"
+                t.newsletter.subscribeButton
               )}
             </Button>
           </form>

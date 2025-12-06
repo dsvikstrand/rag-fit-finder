@@ -13,6 +13,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Loader2, Sparkles } from "lucide-react";
+import { useTranslation } from "@/lib/i18n";
 import type { FormData } from "@/lib/bucketLogic";
 
 interface FitCheckFormProps {
@@ -20,16 +21,8 @@ interface FitCheckFormProps {
   isLoading?: boolean;
 }
 
-const DATA_TYPES = [
-  { id: "pdfs", label: "PDFs / documents" },
-  { id: "wiki", label: "Knowledge base / wiki" },
-  { id: "emails", label: "Emails / tickets" },
-  { id: "code", label: "Code" },
-  { id: "website", label: "Website content" },
-  { id: "other", label: "Other" },
-];
-
 export function FitCheckForm({ onSubmit, isLoading }: FitCheckFormProps) {
+  const { t } = useTranslation();
   const [useCase, setUseCase] = useState("");
   const [dataTypes, setDataTypes] = useState<string[]>([]);
   const [dataSize, setDataSize] = useState("");
@@ -39,6 +32,15 @@ export function FitCheckForm({ onSubmit, isLoading }: FitCheckFormProps) {
   const [budget, setBudget] = useState("");
   const [goal, setGoal] = useState("");
   const [email, setEmail] = useState("");
+
+  const DATA_TYPES = [
+    { id: "pdfs", label: t.form.dataTypePdfs },
+    { id: "wiki", label: t.form.dataTypeWiki },
+    { id: "emails", label: t.form.dataTypeEmails },
+    { id: "code", label: t.form.dataTypeCode },
+    { id: "website", label: t.form.dataTypeWebsite },
+    { id: "other", label: t.form.dataTypeOther },
+  ];
 
   const toggleDataType = (id: string) => {
     setDataTypes(prev => 
@@ -70,39 +72,41 @@ export function FitCheckForm({ onSubmit, isLoading }: FitCheckFormProps) {
       <div className="max-w-2xl mx-auto">
         <div className="text-center mb-10">
           <h2 className="text-3xl sm:text-4xl font-display font-semibold mb-4">
-            Tell me about your setup
+            {t.form.title}
           </h2>
           <p className="text-muted-foreground">
-            This takes about 2 minutes. All fields help me give you better recommendations.
+            {t.form.subtitle}
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="card-elevated p-6 sm:p-8 space-y-8">
+        <form onSubmit={handleSubmit} className="card-elevated p-6 sm:p-8 space-y-10">
           {/* Use Case */}
-          <div className="space-y-2">
-            <Label htmlFor="useCase" className="form-label">Use case</Label>
+          <div className="space-y-3">
+            <Label htmlFor="useCase" className="form-label-display">{t.form.useCaseLabel}</Label>
             <Select value={useCase} onValueChange={setUseCase}>
-              <SelectTrigger id="useCase">
-                <SelectValue placeholder="What will the assistant do?" />
+              <SelectTrigger id="useCase" className="form-select-trigger">
+                <SelectValue placeholder={t.form.useCasePlaceholder} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="support">Customer support chatbot</SelectItem>
-                <SelectItem value="knowledge">Internal knowledge base</SelectItem>
-                <SelectItem value="contracts">Search across contracts and documents</SelectItem>
-                <SelectItem value="developer">Developer / code assistant</SelectItem>
-                <SelectItem value="other">Other</SelectItem>
+                <SelectItem value="support">{t.form.useCaseSupport}</SelectItem>
+                <SelectItem value="knowledge">{t.form.useCaseKnowledge}</SelectItem>
+                <SelectItem value="contracts">{t.form.useCaseContracts}</SelectItem>
+                <SelectItem value="developer">{t.form.useCaseDeveloper}</SelectItem>
+                <SelectItem value="other">{t.form.useCaseOther}</SelectItem>
               </SelectContent>
             </Select>
           </div>
 
+          <div className="h-px bg-border/50" />
+
           {/* Data Types */}
-          <div className="space-y-3">
-            <Label className="form-label">Data types (select all that apply)</Label>
+          <div className="space-y-4">
+            <Label className="form-label-display">{t.form.dataTypesLabel}</Label>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
               {DATA_TYPES.map(type => (
                 <label 
                   key={type.id}
-                  className="flex items-center gap-2 p-3 rounded-lg border border-border bg-background hover:bg-muted/50 cursor-pointer transition-colors"
+                  className={`form-option-card ${dataTypes.includes(type.id) ? "form-option-selected" : ""}`}
                 >
                   <Checkbox 
                     checked={dataTypes.includes(type.id)}
@@ -114,150 +118,162 @@ export function FitCheckForm({ onSubmit, isLoading }: FitCheckFormProps) {
             </div>
           </div>
 
+          <div className="h-px bg-border/50" />
+
           {/* Data Size */}
-          <div className="space-y-3">
-            <Label className="form-label">Approximate data size</Label>
-            <RadioGroup value={dataSize} onValueChange={setDataSize} className="space-y-2">
-              <label className="flex items-center gap-3 p-3 rounded-lg border border-border bg-background hover:bg-muted/50 cursor-pointer transition-colors">
+          <div className="space-y-4">
+            <Label className="form-label-display">{t.form.dataSizeLabel}</Label>
+            <RadioGroup value={dataSize} onValueChange={setDataSize} className="space-y-3">
+              <label className={`form-option-card ${dataSize === "small" ? "form-option-selected" : ""}`}>
                 <RadioGroupItem value="small" id="size-small" />
-                <span className="text-sm">&lt; 100 documents/pages</span>
+                <span className="text-sm">{t.form.dataSizeSmall}</span>
               </label>
-              <label className="flex items-center gap-3 p-3 rounded-lg border border-border bg-background hover:bg-muted/50 cursor-pointer transition-colors">
+              <label className={`form-option-card ${dataSize === "medium" ? "form-option-selected" : ""}`}>
                 <RadioGroupItem value="medium" id="size-medium" />
-                <span className="text-sm">100 – 10,000 documents/pages</span>
+                <span className="text-sm">{t.form.dataSizeMedium}</span>
               </label>
-              <label className="flex items-center gap-3 p-3 rounded-lg border border-border bg-background hover:bg-muted/50 cursor-pointer transition-colors">
+              <label className={`form-option-card ${dataSize === "large" ? "form-option-selected" : ""}`}>
                 <RadioGroupItem value="large" id="size-large" />
-                <span className="text-sm">&gt; 10,000 documents/pages</span>
+                <span className="text-sm">{t.form.dataSizeLarge}</span>
               </label>
             </RadioGroup>
           </div>
+
+          <div className="h-px bg-border/50" />
 
           {/* Data Sensitivity */}
-          <div className="space-y-3">
-            <Label className="form-label">Data sensitivity</Label>
-            <RadioGroup value={dataSensitivity} onValueChange={setDataSensitivity} className="space-y-2">
-              <label className="flex items-center gap-3 p-3 rounded-lg border border-border bg-background hover:bg-muted/50 cursor-pointer transition-colors">
+          <div className="space-y-4">
+            <Label className="form-label-display">{t.form.sensitivityLabel}</Label>
+            <RadioGroup value={dataSensitivity} onValueChange={setDataSensitivity} className="space-y-3">
+              <label className={`form-option-card ${dataSensitivity === "public" ? "form-option-selected" : ""}`}>
                 <RadioGroupItem value="public" id="sens-public" />
-                <span className="text-sm">Mostly public or low-risk</span>
+                <span className="text-sm">{t.form.sensitivityPublic}</span>
               </label>
-              <label className="flex items-center gap-3 p-3 rounded-lg border border-border bg-background hover:bg-muted/50 cursor-pointer transition-colors">
+              <label className={`form-option-card ${dataSensitivity === "internal" ? "form-option-selected" : ""}`}>
                 <RadioGroupItem value="internal" id="sens-internal" />
-                <span className="text-sm">Internal but not highly sensitive</span>
+                <span className="text-sm">{t.form.sensitivityInternal}</span>
               </label>
-              <label className="flex items-center gap-3 p-3 rounded-lg border border-border bg-background hover:bg-muted/50 cursor-pointer transition-colors">
+              <label className={`form-option-card ${dataSensitivity === "sensitive" ? "form-option-selected" : ""}`}>
                 <RadioGroupItem value="sensitive" id="sens-sensitive" />
-                <span className="text-sm">Sensitive / regulated (HR, legal, medical, finance, etc.)</span>
+                <span className="text-sm">{t.form.sensitivitySensitive}</span>
               </label>
             </RadioGroup>
           </div>
+
+          <div className="h-px bg-border/50" />
 
           {/* User Count */}
-          <div className="space-y-3">
-            <Label className="form-label">Number of expected users</Label>
-            <RadioGroup value={userCount} onValueChange={setUserCount} className="space-y-2">
-              <label className="flex items-center gap-3 p-3 rounded-lg border border-border bg-background hover:bg-muted/50 cursor-pointer transition-colors">
+          <div className="space-y-4">
+            <Label className="form-label-display">{t.form.usersLabel}</Label>
+            <RadioGroup value={userCount} onValueChange={setUserCount} className="space-y-3">
+              <label className={`form-option-card ${userCount === "small" ? "form-option-selected" : ""}`}>
                 <RadioGroupItem value="small" id="users-small" />
-                <span className="text-sm">1–10 (small team)</span>
+                <span className="text-sm">{t.form.usersSmall}</span>
               </label>
-              <label className="flex items-center gap-3 p-3 rounded-lg border border-border bg-background hover:bg-muted/50 cursor-pointer transition-colors">
+              <label className={`form-option-card ${userCount === "department" ? "form-option-selected" : ""}`}>
                 <RadioGroupItem value="department" id="users-dept" />
-                <span className="text-sm">10–100 (one department)</span>
+                <span className="text-sm">{t.form.usersDepartment}</span>
               </label>
-              <label className="flex items-center gap-3 p-3 rounded-lg border border-border bg-background hover:bg-muted/50 cursor-pointer transition-colors">
+              <label className={`form-option-card ${userCount === "company" ? "form-option-selected" : ""}`}>
                 <RadioGroupItem value="company" id="users-company" />
-                <span className="text-sm">100+ (whole company or customers)</span>
+                <span className="text-sm">{t.form.usersCompany}</span>
               </label>
             </RadioGroup>
           </div>
+
+          <div className="h-px bg-border/50" />
 
           {/* Latency */}
-          <div className="space-y-3">
-            <Label className="form-label">Latency tolerance</Label>
-            <RadioGroup value={latency} onValueChange={setLatency} className="space-y-2">
-              <label className="flex items-center gap-3 p-3 rounded-lg border border-border bg-background hover:bg-muted/50 cursor-pointer transition-colors">
+          <div className="space-y-4">
+            <Label className="form-label-display">{t.form.latencyLabel}</Label>
+            <RadioGroup value={latency} onValueChange={setLatency} className="space-y-3">
+              <label className={`form-option-card ${latency === "slow" ? "form-option-selected" : ""}`}>
                 <RadioGroupItem value="slow" id="lat-slow" />
-                <span className="text-sm">It's fine if it takes a few seconds</span>
+                <span className="text-sm">{t.form.latencySlow}</span>
               </label>
-              <label className="flex items-center gap-3 p-3 rounded-lg border border-border bg-background hover:bg-muted/50 cursor-pointer transition-colors">
+              <label className={`form-option-card ${latency === "medium" ? "form-option-selected" : ""}`}>
                 <RadioGroupItem value="medium" id="lat-medium" />
-                <span className="text-sm">Should feel reasonably fast (1–3 seconds)</span>
+                <span className="text-sm">{t.form.latencyMedium}</span>
               </label>
-              <label className="flex items-center gap-3 p-3 rounded-lg border border-border bg-background hover:bg-muted/50 cursor-pointer transition-colors">
+              <label className={`form-option-card ${latency === "fast" ? "form-option-selected" : ""}`}>
                 <RadioGroupItem value="fast" id="lat-fast" />
-                <span className="text-sm">Needs to be snappy (&lt; 1 second)</span>
+                <span className="text-sm">{t.form.latencyFast}</span>
               </label>
             </RadioGroup>
           </div>
+
+          <div className="h-px bg-border/50" />
 
           {/* Budget */}
-          <div className="space-y-3">
-            <Label className="form-label">Monthly budget for AI tooling</Label>
-            <RadioGroup value={budget} onValueChange={setBudget} className="space-y-2">
-              <label className="flex items-center gap-3 p-3 rounded-lg border border-border bg-background hover:bg-muted/50 cursor-pointer transition-colors">
+          <div className="space-y-4">
+            <Label className="form-label-display">{t.form.budgetLabel}</Label>
+            <RadioGroup value={budget} onValueChange={setBudget} className="space-y-3">
+              <label className={`form-option-card ${budget === "under100" ? "form-option-selected" : ""}`}>
                 <RadioGroupItem value="under100" id="budget-1" />
-                <span className="text-sm">&lt; €100</span>
+                <span className="text-sm">{t.form.budgetUnder100}</span>
               </label>
-              <label className="flex items-center gap-3 p-3 rounded-lg border border-border bg-background hover:bg-muted/50 cursor-pointer transition-colors">
+              <label className={`form-option-card ${budget === "100to1000" ? "form-option-selected" : ""}`}>
                 <RadioGroupItem value="100to1000" id="budget-2" />
-                <span className="text-sm">€100 – €1,000</span>
+                <span className="text-sm">{t.form.budget100to1000}</span>
               </label>
-              <label className="flex items-center gap-3 p-3 rounded-lg border border-border bg-background hover:bg-muted/50 cursor-pointer transition-colors">
+              <label className={`form-option-card ${budget === "1000to10000" ? "form-option-selected" : ""}`}>
                 <RadioGroupItem value="1000to10000" id="budget-3" />
-                <span className="text-sm">€1,000 – €10,000</span>
+                <span className="text-sm">{t.form.budget1000to10000}</span>
               </label>
-              <label className="flex items-center gap-3 p-3 rounded-lg border border-border bg-background hover:bg-muted/50 cursor-pointer transition-colors">
+              <label className={`form-option-card ${budget === "over10000" ? "form-option-selected" : ""}`}>
                 <RadioGroupItem value="over10000" id="budget-4" />
-                <span className="text-sm">&gt; €10,000</span>
+                <span className="text-sm">{t.form.budgetOver10000}</span>
               </label>
             </RadioGroup>
           </div>
 
+          <div className="h-px bg-border/50" />
+
           {/* Goal */}
-          <div className="space-y-2">
-            <Label htmlFor="goal" className="form-label">
-              What are you hoping this AI assistant will do for you?
+          <div className="space-y-3">
+            <Label htmlFor="goal" className="form-label-display">
+              {t.form.goalLabel}
             </Label>
             <Textarea 
               id="goal"
               value={goal}
               onChange={(e) => setGoal(e.target.value)}
-              placeholder="e.g., Help our support team answer customer questions faster..."
+              placeholder={t.form.goalPlaceholder}
               className="min-h-[100px] resize-none"
             />
-            <p className="form-description">Optional, but helps me understand your needs better.</p>
+            <p className="form-description">{t.form.goalDescription}</p>
           </div>
 
           {/* Email */}
-          <div className="space-y-2">
-            <Label htmlFor="email" className="form-label">
-              Email (optional)
+          <div className="space-y-3">
+            <Label htmlFor="email" className="form-label-display">
+              {t.form.emailLabel}
             </Label>
             <Input 
               id="email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="your@email.com"
+              placeholder={t.form.emailPlaceholder}
             />
-            <p className="form-description">Only if you want a summary and occasional RAG tips.</p>
+            <p className="form-description">{t.form.emailDescription}</p>
           </div>
 
           <Button 
             type="submit" 
             size="lg" 
             disabled={!isValid || isLoading}
-            className="w-full text-lg py-6 rounded-xl"
+            className={`w-full text-lg py-6 rounded-xl transition-all duration-300 ${isValid && !isLoading ? "form-submit-glow" : ""}`}
           >
             {isLoading ? (
               <>
                 <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                Analyzing...
+                {t.form.analyzingButton}
               </>
             ) : (
               <>
                 <Sparkles className="mr-2 h-5 w-5" />
-                Analyze my options
+                {t.form.submitButton}
               </>
             )}
           </Button>

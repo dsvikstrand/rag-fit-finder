@@ -137,8 +137,30 @@
     @apply text-sm font-medium text-foreground mb-2 block;
   }
 
+  .form-label-display {
+    @apply font-display text-lg font-semibold text-foreground mb-3 block;
+  }
+
   .form-description {
     @apply text-xs text-muted-foreground mt-1;
+  }
+
+  .form-option-card {
+    @apply flex items-center gap-3 p-4 rounded-lg border border-border bg-background 
+           cursor-pointer transition-all duration-200 ease-out
+           hover:bg-muted/50 hover:border-primary/30 hover:shadow-sm;
+  }
+
+  .form-option-selected {
+    @apply border-primary/50 bg-primary/5 shadow-sm;
+  }
+
+  .form-select-trigger {
+    @apply h-12 text-base;
+  }
+
+  .form-submit-glow {
+    @apply shadow-lg shadow-primary/30;
   }
 }
 
