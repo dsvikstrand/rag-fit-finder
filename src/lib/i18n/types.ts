@@ -13,7 +13,32 @@ export interface Translations {
     subtitle: string;
     description: string;
     ctaButton: string;
+    whatsRagButton: string;
     privacyNote: string;
+  };
+
+  // What's RAG Modal
+  whatsRag: {
+    buttonText: string;
+    title: string;
+    whatIsRagTitle: string;
+    whatIsRagDesc: string;
+    useCasesTitle: string;
+    useCaseChatbotTitle: string;
+    useCaseChatbotDesc: string;
+    useCaseSearchTitle: string;
+    useCaseSearchDesc: string;
+    useCaseRecommendationTitle: string;
+    useCaseRecommendationDesc: string;
+    useCaseDocumentTitle: string;
+    useCaseDocumentDesc: string;
+    useCaseKnowledgeTitle: string;
+    useCaseKnowledgeDesc: string;
+    whyFitCheckTitle: string;
+    whyFitCheckDesc: string;
+    reason1: string;
+    reason2: string;
+    reason3: string;
   };
 
   // Form
