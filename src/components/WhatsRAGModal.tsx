@@ -72,17 +72,20 @@ export function WhatsRAGModal({ children }: WhatsRAGModalProps) {
           <div>
             <h3 className="text-lg font-semibold mb-4">{t.whatsRag.useCasesTitle}</h3>
             <div className="grid gap-4">
-              {useCases.map((useCase, index) => (
-                <div key={index} className="flex gap-4 p-4 rounded-lg bg-muted/50">
-                  <div className="flex-shrink-0">
-                    <useCase.icon className="h-6 w-6 text-primary" />
+              {useCases.map((useCase, index) => {
+                const IconComponent = useCase.icon;
+                return (
+                  <div key={index} className="flex gap-4 p-4 rounded-lg bg-muted/50">
+                    <div className="flex-shrink-0">
+                      <IconComponent className="h-6 w-6 text-primary" />
+                    </div>
+                    <div>
+                      <h4 className="font-medium mb-1">{useCase.title}</h4>
+                      <p className="text-sm text-muted-foreground">{useCase.description}</p>
+                    </div>
                   </div>
-                  <div>
-                    <h4 className="font-medium mb-1">{useCase.title}</h4>
-                    <p className="text-sm text-muted-foreground">{useCase.description}</p>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
 
