@@ -21,7 +21,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
       const stored = localStorage.getItem(STORAGE_KEY);
       if (stored === "en" || stored === "sv") return stored;
     }
-    return "en";
+    return "sv";
   });
 
   const setLanguage = (lang: Language) => {
