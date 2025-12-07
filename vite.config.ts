@@ -3,10 +3,9 @@ import react from "@vitejs/plugin-react-swc";
 import path from "path";
 import { componentTagger } from "lovable-tagger";
 
-// https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
-  // 👇 important: GitHub Pages serves at /rag-fit-finder/
-  base: mode === "production" ? "/rag-fit-finder/" : "/",
+  // 👇 always build for root, works with custom domain
+  base: "/",
 
   server: {
     host: "::",
