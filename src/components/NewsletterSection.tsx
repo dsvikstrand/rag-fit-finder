@@ -11,9 +11,10 @@ import type { Bucket } from "@/lib/bucketLogic";
 interface NewsletterSectionProps {
   bucket?: Bucket;
   initialEmail?: string;
+  anchorId?: string;
 }
 
-export function NewsletterSection({ bucket = "simple", initialEmail = "" }: NewsletterSectionProps) {
+export function NewsletterSection({ bucket = "simple", initialEmail = "", anchorId = "subscribe" }: NewsletterSectionProps) {
   const { t } = useTranslation();
   const [email, setEmail] = useState(initialEmail);
   const [isLoading, setIsLoading] = useState(false);
@@ -90,7 +91,7 @@ export function NewsletterSection({ bucket = "simple", initialEmail = "" }: News
   }
 
   return (
-    <section className="section-padding">
+    <section className="section-padding" id={anchorId}>
       <div className="max-w-xl mx-auto">
         <div className="card-elevated p-6 sm:p-8">
           <div className="flex items-center gap-3 mb-4">

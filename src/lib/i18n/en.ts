@@ -4,6 +4,7 @@ export const en: Translations = {
   header: {
     startAssessment: "Start assessment",
     contact: "Contact",
+    subscribe: "Subscribe",
   },
 
   hero: {

@@ -97,6 +97,12 @@ const Index = () => {
               >
                 {t.header.contact}
               </a>
+              <a 
+                href="#subscribe" 
+                className="text-muted-foreground hover:text-foreground transition-colors"
+              >
+                {t.header.subscribe}
+              </a>
             </nav>
             <LanguageToggle />
           </div>
@@ -126,6 +132,7 @@ const Index = () => {
         <NewsletterSection 
           bucket={results?.bucket ?? "simple"} 
           initialEmail={results?.formData.email ?? ""} 
+          anchorId="subscribe"
         />
       </main>
 

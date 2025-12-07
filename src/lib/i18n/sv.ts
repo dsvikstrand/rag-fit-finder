@@ -4,6 +4,7 @@ export const sv: Translations = {
   header: {
     startAssessment: "Starta analysen",
     contact: "Kontakt",
+    subscribe: "Prenumerera",
   },
 
   hero: {

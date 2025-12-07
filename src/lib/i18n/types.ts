@@ -5,6 +5,7 @@ export interface Translations {
   header: {
     startAssessment: string;
     contact: string;
+    subscribe: string;
   };
 
   // Hero
