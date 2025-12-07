@@ -30,9 +30,6 @@ export function FitCheckForm({ onSubmit, isLoading }: FitCheckFormProps) {
   const [userCount, setUserCount] = useState("");
   const [latency, setLatency] = useState("");
   const [budget, setBudget] = useState("");
-  const [goal, setGoal] = useState("");
-  const [email, setEmail] = useState("");
-
   const DATA_TYPES = [
     { id: "pdfs", label: t.form.dataTypePdfs },
     { id: "wiki", label: t.form.dataTypeWiki },
@@ -60,8 +57,8 @@ export function FitCheckForm({ onSubmit, isLoading }: FitCheckFormProps) {
       userCount,
       latency,
       budget,
-      goal,
-      email,
+      goal: "",
+      email: "",
     });
   };
 
@@ -229,35 +226,8 @@ export function FitCheckForm({ onSubmit, isLoading }: FitCheckFormProps) {
 
           <div className="h-px bg-border/50" />
 
-          {/* Goal */}
-          <div className="space-y-3">
-            <Label htmlFor="goal" className="form-label-display">
-              {t.form.goalLabel}
-            </Label>
-            <Textarea 
-              id="goal"
-              value={goal}
-              onChange={(e) => setGoal(e.target.value)}
-              placeholder={t.form.goalPlaceholder}
-              className="min-h-[100px] resize-none"
-            />
-            <p className="form-description">{t.form.goalDescription}</p>
-          </div>
-
-          {/* Email */}
-          <div className="space-y-3">
-            <Label htmlFor="email" className="form-label-display">
-              {t.form.emailLabel}
-            </Label>
-            <Input 
-              id="email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder={t.form.emailPlaceholder}
-            />
-            <p className="form-description">{t.form.emailDescription}</p>
-          </div>
+          {/* Goal (removed) */}
+          {/* Email (removed) */}
 
           <Button 
             type="submit" 

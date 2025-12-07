@@ -55,7 +55,7 @@ export function WhatsRagDialog() {
         </Button>
       </DialogTrigger>
 
-      <DialogContent className="max-w-3xl">
+      <DialogContent className="max-w-3xl w-[92vw] max-h-[90vh] overflow-y-auto">
         <DialogHeader className="space-y-3">
           <DialogTitle className="text-2xl font-display">{t.whatsRag.title}</DialogTitle>
           <DialogDescription className="text-base leading-relaxed">
