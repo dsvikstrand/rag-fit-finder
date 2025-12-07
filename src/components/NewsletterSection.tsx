@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { Loader2, Mail, CheckCircle } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
@@ -10,22 +9,23 @@ import { useTranslation } from "@/lib/i18n";
 import type { Bucket } from "@/lib/bucketLogic";
 
 interface NewsletterSectionProps {
-  bucket: Bucket;
+  bucket?: Bucket;
   initialEmail?: string;
 }
 
-export function NewsletterSection({ bucket, initialEmail = "" }: NewsletterSectionProps) {
+export function NewsletterSection({ bucket = "simple", initialEmail = "" }: NewsletterSectionProps) {
   const { t } = useTranslation();
   const [email, setEmail] = useState(initialEmail);
-  const [consent, setConsent] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isSubscribed, setIsSubscribed] = useState(false);
   const { toast } = useToast();
 
+  const bucketToUse: Bucket = bucket || "simple";
+
   const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!email || !consent) {
+    if (!email) {
       toast({
         title: t.newsletter.errorTitle,
         description: t.newsletter.errorDescription,
@@ -39,7 +39,7 @@ export function NewsletterSection({ bucket, initialEmail = "" }: NewsletterSecti
     try {
       const { error } = await supabase.from("subscribers").insert({
         email,
-        bucket,
+        bucket: bucketToUse,
         form_data: { subscribed_from: "results_page" },
       });
 
@@ -117,18 +117,7 @@ export function NewsletterSection({ bucket, initialEmail = "" }: NewsletterSecti
               />
             </div>
 
-            <label className="flex items-start gap-3 cursor-pointer">
-              <Checkbox
-                checked={consent}
-                onCheckedChange={(checked) => setConsent(checked === true)}
-                className="mt-0.5"
-              />
-              <span className="text-sm text-muted-foreground leading-relaxed">
-                {t.newsletter.consentText}
-              </span>
-            </label>
-
-            <Button type="submit" disabled={isLoading || !email || !consent} className="w-full">
+            <Button type="submit" disabled={isLoading || !email} className="w-full">
               {isLoading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />

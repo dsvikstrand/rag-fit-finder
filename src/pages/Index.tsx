@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { HeroSection } from "@/components/HeroSection";
 import { FitCheckForm } from "@/components/FitCheckForm";
 import { ResultsSection } from "@/components/ResultsSection";
@@ -16,7 +16,7 @@ import {
 } from "@/lib/bucketLogic";
 
 const Index = () => {
-  const { t } = useTranslation();
+  const { t, language } = useTranslation();
   const [results, setResults] = useState<{
     bucket: Bucket;
     summary: string;
@@ -39,9 +39,9 @@ const Index = () => {
     await new Promise(resolve => setTimeout(resolve, 800));
 
     const bucket = determineBucket(formData);
-    const explanations = generateExplanations(formData);
-    const bullets = generateBullets(bucket, formData);
-    const summary = generateSummary(bucket);
+    const explanations = generateExplanations(formData, t);
+    const bullets = generateBullets(bucket, formData, t);
+    const summary = generateSummary(bucket, t);
 
     setResults({
       bucket,
@@ -58,6 +58,22 @@ const Index = () => {
       resultsRef.current?.scrollIntoView({ behavior: "smooth" });
     }, 100);
   };
+
+  useEffect(() => {
+    if (results) {
+      const bucket = determineBucket(results.formData);
+      const explanations = generateExplanations(results.formData, t);
+      const bullets = generateBullets(bucket, results.formData, t);
+      const summary = generateSummary(bucket, t);
+      setResults(prev => prev ? {
+        ...prev,
+        bucket,
+        summary,
+        explanations,
+        bullets,
+      } : prev);
+    }
+  }, [language, t]);
 
   return (
     <div className="min-h-screen bg-background">
@@ -104,12 +120,13 @@ const Index = () => {
               bullets={results.bullets}
               formData={results.formData}
             />
-            <NewsletterSection 
-              bucket={results.bucket} 
-              initialEmail={results.formData.email} 
-            />
           </div>
         )}
+
+        <NewsletterSection 
+          bucket={results?.bucket ?? "simple"} 
+          initialEmail={results?.formData.email ?? ""} 
+        />
       </main>
 
       <Footer />

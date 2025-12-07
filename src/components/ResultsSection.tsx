@@ -1,5 +1,4 @@
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
@@ -8,9 +7,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { CheckCircle2, Star, ArrowRight, Zap, Server, Lock, ExternalLink } from "lucide-react";
+import { CheckCircle2, Star, ArrowRight, Zap, Server, Lock } from "lucide-react";
 import { useTranslation } from "@/lib/i18n";
 import type { Bucket, FormData } from "@/lib/bucketLogic";
+import { ContactDrawer } from "@/components/ContactDrawer";
 
 interface ResultsSectionProps {
   bucket: Bucket;
@@ -52,8 +52,8 @@ export function ResultsSection({ bucket, summary, explanations, bullets, formDat
           bestFor: t.results.simpleBestFor,
           quality: 2,
           qualityLabel: t.results.simpleQualityLabel,
-          speed: "2–5 sec",
-          cost: "€10–100/mo",
+          speed: t.results.simpleSpeed,
+          cost: t.results.simpleCost,
           control: t.results.simpleControl,
           complexity: t.results.simpleComplexity,
         };
@@ -62,8 +62,8 @@ export function ResultsSection({ bucket, summary, explanations, bullets, formDat
           bestFor: t.results.midBestFor,
           quality: 4,
           qualityLabel: t.results.midQualityLabel,
-          speed: "1–3 sec",
-          cost: "€100–1000/mo",
+          speed: t.results.midSpeed,
+          cost: t.results.midCost,
           control: t.results.midControl,
           complexity: t.results.midComplexity,
         };
@@ -72,8 +72,8 @@ export function ResultsSection({ bucket, summary, explanations, bullets, formDat
           bestFor: t.results.indepthBestFor,
           quality: 5,
           qualityLabel: t.results.indepthQualityLabel,
-          speed: "Configurable",
-          cost: "€500–5000+/mo",
+          speed: t.results.indepthSpeed,
+          cost: t.results.indepthCost,
           control: t.results.indepthControl,
           complexity: t.results.indepthComplexity,
         };
@@ -239,12 +239,12 @@ function NextStepsCTA({ bucket }: { bucket: Bucket }) {
         <p className="text-muted-foreground leading-relaxed">
           {t.results.simpleCTADesc}
         </p>
-        <Button asChild className="mt-4">
-          <a href="#contact">
-            {t.results.simpleCTAButton}
-            <ExternalLink className="ml-2 h-4 w-4" />
-          </a>
-        </Button>
+        <div className="mt-4">
+          <ContactDrawer 
+            triggerLabel={t.results.simpleCTAButton} 
+            context={t.results.simpleCTATitle}
+          />
+        </div>
       </div>
     );
   }
@@ -267,12 +267,12 @@ function NextStepsCTA({ bucket }: { bucket: Bucket }) {
         <p className="text-xs text-muted-foreground mt-2 italic">
           {t.results.midCTADevNote}
         </p>
-        <Button asChild className="mt-4">
-          <a href="#contact">
-            {t.results.midCTAButton}
-            <ExternalLink className="ml-2 h-4 w-4" />
-          </a>
-        </Button>
+        <div className="mt-4">
+          <ContactDrawer 
+            triggerLabel={t.results.midCTAButton} 
+            context={t.results.midCTATitle}
+          />
+        </div>
       </div>
     );
   }
@@ -294,12 +294,12 @@ function NextStepsCTA({ bucket }: { bucket: Bucket }) {
       <p className="text-xs text-muted-foreground mt-2 italic">
         {t.results.indepthCTADevNote}
       </p>
-      <Button asChild className="mt-4">
-        <a href="#contact">
-          {t.results.indepthCTAButton}
-          <ExternalLink className="ml-2 h-4 w-4" />
-        </a>
-      </Button>
+      <div className="mt-4">
+        <ContactDrawer 
+          triggerLabel={t.results.indepthCTAButton} 
+          context={t.results.indepthCTATitle}
+        />
+      </div>
     </div>
   );
 }

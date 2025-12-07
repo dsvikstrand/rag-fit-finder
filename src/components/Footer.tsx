@@ -28,11 +28,21 @@ export function Footer() {
             </p>
           </div>
           <Button asChild variant="outline">
-            <a href="mailto:hello@example.com">
+            <a href={`mailto:${t.footer.contactEmail}`}>
               <Mail className="mr-2 h-4 w-4" />
               {t.footer.contactButton}
             </a>
           </Button>
+        </div>
+
+        {/* Direct links */}
+        <div className="pt-4 text-sm text-muted-foreground">
+          <p className="font-semibold text-foreground mb-2">{t.footer.linksLabel}</p>
+          <div className="flex flex-wrap gap-4">
+            <a className="text-primary hover:underline" href={`mailto:${t.footer.contactEmail}`}>{t.footer.contactEmail}</a>
+            <a className="text-primary hover:underline" href="https://vdsai.se/" target="_blank" rel="noreferrer">vdsai.se</a>
+            <a className="text-primary hover:underline" href="https://www.linkedin.com/in/david-vikstrand/" target="_blank" rel="noreferrer">{t.footer.linkedinLinkLabel}</a>
+          </div>
         </div>
 
         {/* Privacy */}

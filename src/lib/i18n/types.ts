@@ -136,6 +136,13 @@ export interface Translations {
     indepthQualityLabel: string;
     indepthControl: string;
     indepthComplexity: string;
+    // KPI metrics
+    simpleSpeed: string;
+    simpleCost: string;
+    midSpeed: string;
+    midCost: string;
+    indepthSpeed: string;
+    indepthCost: string;
     // Approach descriptions
     simpleApproachTitle: string;
     simpleApproachDesc: string;
@@ -175,6 +182,29 @@ export interface Translations {
     alreadySubscribedDesc: string;
   };
 
+  // Contact drawer
+  contactDrawer: {
+    title: string;
+    subtitle: string;
+    nameLabel: string;
+    namePlaceholder: string;
+    emailLabel: string;
+    emailPlaceholder: string;
+    companyLabel: string;
+    companyPlaceholder: string;
+    submit: string;
+    submitting: string;
+    cancel: string;
+    successTitle: string;
+    successDesc: string;
+    errorTitle: string;
+    errorDesc: string;
+    missingFieldsTitle: string;
+    missingFieldsDesc: string;
+    emailFallbackTitle: string;
+    emailFallbackDesc: string;
+  };
+
   // Footer
   footer: {
     aboutTitle: string;
@@ -183,6 +213,11 @@ export interface Translations {
     contactTitle: string;
     contactDescription: string;
     contactButton: string;
+    contactEmail: string;
+    linksLabel: string;
+    emailLinkLabel: string;
+    websiteLinkLabel: string;
+    linkedinLinkLabel: string;
     privacyTitle: string;
     privacyText: string;
     copyright: string;

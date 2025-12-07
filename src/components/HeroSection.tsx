@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { ArrowDown, Shield } from "lucide-react";
 import { useTranslation } from "@/lib/i18n";
+import { WhatsRagDialog } from "@/components/WhatsRagDialog";
 
 interface HeroSectionProps {
   onStartClick: () => void;
@@ -26,14 +27,18 @@ export function HeroSection({ onStartClick }: HeroSectionProps) {
           {t.hero.description}
         </p>
 
-        <Button 
-          size="lg" 
-          onClick={onStartClick}
-          className="text-lg px-8 py-6 rounded-full shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/30 transition-all duration-300 hover:-translate-y-0.5"
-        >
-          {t.hero.ctaButton}
-          <ArrowDown className="ml-2 h-5 w-5 animate-bounce" />
-        </Button>
+        <div className="flex flex-wrap justify-center gap-3">
+          <Button 
+            size="lg" 
+            onClick={onStartClick}
+            className="text-lg px-8 py-6 rounded-full shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/30 transition-all duration-300 hover:-translate-y-0.5"
+          >
+            {t.hero.ctaButton}
+            <ArrowDown className="ml-2 h-5 w-5 animate-bounce" />
+          </Button>
+
+          <WhatsRagDialog />
+        </div>
 
         <div className="flex items-center justify-center gap-2 mt-8 text-sm text-muted-foreground">
           <Shield className="h-4 w-4" />
